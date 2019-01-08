@@ -1,26 +1,27 @@
 function getRectRight (rect) {
-	return rect.width > 0 ? rect.left + rect.width : 0;
+	return rect.left + rect.width;
+
 }
 
-function gerRectBottom (rect) {
-	return rect.height > 0 ? rect.top + rect.height : 0;
+function getRectBottom (rect) {
+	return rect.top + rect.height;
 }
+
 
 export function areIntersected (rect1, rect2) {
 
-	let horizontalIntersectionFirstRect = rect1.left < getRectRight(rect2);
-	let horizontalIntersectionSecondRect = getRectRight(rect1) > rect2.left;
+	let horizontalIntersection = rect1.left < getRectRight(rect2) && getRectRight(rect1) > rect2.left;
+	let verticalIntersection = rect1.top < getRectBottom(rect2) && getRectBottom(rect1) > rect2.top;
 
-	let verticalIntersectionFirstRect = rect1.top < gerRectBottom(rect2);
-	let verticalIntersectionSecondRect = gerRectBottom(rect1) > rect2.top;
-
-
-	return 	horizontalIntersectionFirstRect
-					&& horizontalIntersectionSecondRect
-					&& verticalIntersectionFirstRect
-					&& verticalIntersectionSecondRect;
+	return horizontalIntersection && verticalIntersection;
 }
 
 export function filterVisible (rect, array) {
-	return array.filter(elem => areIntersected(rect, elem));
+
+	return array.filter(elem => {
+		let rectanglesVisible = elem.width !== 0 && elem.height !== 0;
+
+		return areIntersected(rect, elem) && rectanglesVisible;
+	});
+
 }
